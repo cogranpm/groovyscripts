@@ -148,7 +148,7 @@ assert buck + 3 == new Money(4, 'USD')
 def multiLine = """I span multiple 
 lines"""
 
-print multiLine
+println multiLine
 
 //need to do this to get a character
 char meChar = 'x'
@@ -179,7 +179,13 @@ def myEsc = "my 0.02\$"
 
 //gstrings are not strings but groovy will coerce them automatically
 
-
+//stringbuffer is created when  << is used on a string
+def greeting = 'Hello'
+greeting <<= ' Groovy'
+assert greeting instanceof java.lang.StringBuffer
+greeting << '!'
+greeting[1..4] = 'i'
+println greeting
 
 
 
