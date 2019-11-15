@@ -181,11 +181,14 @@ def myEsc = "my 0.02\$"
 
 //stringbuffer is created when  << is used on a string
 def greeting = 'Hello'
+//<< and assign turns string into strinbuffer
 greeting <<= ' Groovy'
 assert greeting instanceof java.lang.StringBuffer
 greeting << '!'
 greeting[1..4] = 'i'
 println greeting
+
+
 
 
 
