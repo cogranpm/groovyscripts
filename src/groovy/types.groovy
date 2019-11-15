@@ -189,6 +189,150 @@ greeting[1..4] = 'i'
 println greeting
 
 
+//regular expression support
+//find =~
+//match ==~
+//pattern ~string
+assert "abc"  == /abc/
+assert "\\d" == /\d/ //no need to escape backslash in slashy string / /
+def reference = "hello"
+assert reference == /$reference/
+
+/* pattern symbols
+ * .			any character
+ * ^			start of line
+ * $			end of line
+ * \d			digit character
+ * \D			any character except digit
+ * \s			whitespace character
+ * \S			any char except whitespace
+ * \w			word character
+ * \W			any character except word
+ * \b			word boundary
+ * ()			grouping
+ * ( x | y )	x or y, as in (Groovy|Java|Ruby)
+ * \1			backmatch to group 1
+ * x*			zero or more occurences of x
+ * x+			one or more occurences of x
+ * x?			zero or one occurrence of x
+ * x {m, n}		at least m and at most n occurences of x
+ * x{m}			exactly m occurences of x
+ * [a-f]		character class containing a,b,c,d,e,f
+ * [^a]			any character except a
+ * (?is:x)		switch mode when evaluating x, i turns on ignore case, s means single line mode
+ */
+
+
+def twister = 'she sells sea shells at the sea shore of seychelles'
+
+assert twister =~ /s.a/ //find operator, true if finds
+def finder = (twister =~ /s.a/)
+assert finder instanceof java.util.regex.Matcher
+
+//contains only words delimited by single spaces
+assert twister ==~ /(\w+ \w+)*/ //match operator
+
+def WORD = /\w+/
+matches = (twister ==~ /($WORD $WORD)*/)
+assert matches instanceof java.lang.Boolean
+
+assert !(twister ==~ /s.e/) //match is full, unlike find
+
+def wordsByX = twister.replaceAll(WORD, 'x')
+
+def words = twister.split(/ /)
+assert words.size() == 10
+assert words[0] == 'she'
+
+//find evaluates to a Matcher, can be used in groovy conditional due to Groovy truth
+//break up regex with constant expressions where possible
+
+def myFairStringy = 'The rain in Spain stays mainly in the plain!'
+
+def wordEnding = /\w*ain/
+def rhyme = /\b$wordEnding\b/
+def found = ''
+myFairStringy.eachMatch(rhyme) { match ->
+	found += match + ' '
+}
+
+assert found == 'rain Spain plain '
+
+//note closure, implicit use of it for the variable, and the closure if last parameter can be outside the ()'s on the method call
+def cloze = myFairStringy.replaceAll(rhyme) {
+	it-'ain'+'___'
+}
+println cloze
+
+//groovy adds array like access to Matcher
+//and some other stuff to investigate later
+
+
+//NUMBERS
+//decimals default to BigDecimal
+//coercion, when using operators on numbers
+//float or double = double
+//any BigDecimal = BigDecimal
+//any BigInteger = BigInteger
+//any Long = Long
+//otherwise Integer
+
+//intdiv can be used for integer result on division
+//beware, if you divide two ints, you get a rounded int result, you must use floating point literal ie f on one
+//call methods on numbers ie
+assert 1 == (-1).abs()
+assert 2 == 2.5.toInteger()
+assert 2 == 2.5 as Integer
+assert 2 == (int)2.5
+assert 3 == 2.5f.round()
+assert 3.142 == Math.PI.round(3)
+assert 4 == 4.5f.trunc()
+assert 2.718 == Math.E.trunc(3)
+assert '2.718'.isNumber()
+assert 5 == '5'.toInteger()
+assert 5 == '5' as Integer
+assert 53 == (int)'5' //a gotcha, don't cast string to number
+
+//GDK also defines times, upto, downto, step
+def store = ''
+10.times { 
+	store += 'x'
+}
+
+store = ''
+
+1.upto(5) { number ->
+	store += number
+}
+
+
+store  = ''
+2.downto(-2) { number -> 
+	store += number + ' '
+}
+
+store = ''
+0.step(0.5, 0.1) { number ->
+	store += number + ' '
+}
+
+
+//remember types are resolved at runtime, not compile time
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
