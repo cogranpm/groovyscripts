@@ -111,6 +111,8 @@ assert explicitList[0] == 10
 
 //gdk gives toList method to all arrays, collection objects and strings
 
+myList = ['a', 'b', 'c', 'd', 'e', 'f']
+println myList[0..2]
 
 
 
