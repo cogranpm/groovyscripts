@@ -113,6 +113,41 @@ assert explicitList[0] == 10
 
 myList = ['a', 'b', 'c', 'd', 'e', 'f']
 println myList[0..2]
+println myList[0,2,4]
+myList[0..2] = ['x', 'y', 'z']
+myList[3..5] = []
+myList[1..1] = [0, 1, 2] //adding elements
+//-ve index count backward from end of list
+//last entry with list[-1]
+//also ranges [-3..-1] gets last three entries
+//reversed range gives a reversed list, [4..0]
+
+//adding and removing
+myList = []
+myList += 'a'
+myList += ['b', 'c']
+//leftshift is like append
+myList << 'd' << 'e'
+def newList = myList - 'b'
+println myList
+println newList
+
+assert myList.isCase('a')
+assert 'b' in myList
+
+//empty lists are false
+def anEmpty = []
+if (anEmpty) assert false
+
+def candidate = 'c'
+switch (candidate) {
+	case myList : assert true; break
+	default : assert false
+}
+
+
+	
+
 
 
 
