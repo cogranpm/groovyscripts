@@ -1,5 +1,7 @@
 package groovy
 
+import groovy.transform.Sortable
+import groovy.transform.ToString
 
 //ranges
 assert (0..10).contains(10)
@@ -132,6 +134,9 @@ def newList = myList - 'b'
 println myList
 println newList
 
+println "multiply a list: " + myList * 2
+
+
 assert myList.isCase('a')
 assert 'b' in myList
 
@@ -139,11 +144,64 @@ assert 'b' in myList
 def anEmpty = []
 if (anEmpty) assert false
 
+
+//switch with list as the case, checks if item is in list
 def candidate = 'c'
 switch (candidate) {
 	case myList : assert true; break
 	default : assert false
 }
+
+//grep on a list, gives intersection
+def grepList = ['x', 'a', 'z'].grep(myList)
+println "grep on list: $grepList"
+
+//for loop
+def expr = ''
+for (i in [1, '*', 5]) {
+	expr += i
+}
+println expr
+
+
+//list methods, all those in jdk (28)
+assert [1, [2,3]].flatten() == [1,2,3]
+assert [1,2,3].intersect([4,3,1]) == [3,1]
+//returns true if intersection is empty
+println ([1,2,3].disjoint([4,5,6]))
+
+//treat like stack
+//pop, 
+
+//reverse, sort
+def famousHawks = ['Dunstall', 'Brereton', 'Tuck']
+println famousHawks.sort()
+
+
+@Sortable
+@ToString
+class SortExample {
+	String code
+	String desc
+	
+	SortExample(code, desc) {
+		this.code = code
+		this.desc = desc
+	}
+}
+
+//is a sort in place????
+def sortEggs = [new SortExample("angus", "guitar"), new SortExample("filthy", "drums"), new SortExample("malcolm", "ryhthm")]
+sortEggs.sort({ da, db -> da.code <=> db.code})
+println sortEggs
+sortEggs.sort({da, db -> da.desc <=> db.desc})
+println sortEggs
+
+//@Sortable gives us automatice sort by field static methods
+sortEggs.sort(SortExample.comparatorByCode())
+println sortEggs
+sortEggs.sort(SortExample.comparatorByDesc())
+println sortEggs
 
 
 	
