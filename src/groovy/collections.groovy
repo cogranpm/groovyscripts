@@ -2,6 +2,7 @@ package groovy
 
 import groovy.transform.Sortable
 import groovy.transform.ToString
+import java.util.stream.Collectors
 
 //ranges
 assert (0..10).contains(10)
@@ -327,7 +328,7 @@ assert urls
 	
 //java 8 style
 //note the use of some groovy-ism's combined with java style
-import java.util.stream.Collectors
+
 def commaSep = Collectors.joining(", ")	
 assert urls.stream()
 	.filter {it.port < 99}
@@ -336,7 +337,25 @@ assert urls.stream()
 	.collect(commaSep) == 'DOWNLOADS, INDEX.HTML'
 
 
-	
+
+//maps
+def myMap = [a:1, b:2, c:3]
+assert myMap instanceof LinkedHashMap
+assert myMap.size() == 3
+assert myMap['a'] == 1
+
+def emptyMap = [:]
+assert emptyMap.size() == 0
+def explicitMap = new TreeMap()
+explicitMap.putAll(myMap)
+assert explicitMap['a'] == 1
+def composed = [x: 'y', *:myMap]
+assert composed == [x:'y', a:1, b:2, c:3]
+
+//for string keys, can leave out the quotes ' or "
+//might need to put variable in () when using as a key to force evaluation
+
+		
 
 
 
