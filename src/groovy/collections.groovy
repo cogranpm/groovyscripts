@@ -253,6 +253,88 @@ println xnon
 xnon = xnulls.grep {it}
 println xnon
 
+println sortEggs.first()
+println sortEggs.head()
+//tail is all items following the head
+//useful in recursion
+println sortEggs.tail()
+println sortEggs.last()
+println sortEggs.count(angus)
+//max, min
+//find returns the item, not a list
+println sortEggs.find { it.code == angus.code}
+//every, any
+def names = ''
+sortEggs.each { item ->
+	names += "$item.code "
+}
+println names
+
+def defRevNames = ''
+sortEggs.reverseEach { item ->
+	defRevNames += "$item.code "
+}
+println defRevNames
+
+names = ''
+sortEggs.eachWithIndex { item, index ->
+	names += "$index:$item.code "
+}
+println names
+
+//join
+
+//fold/reduce is knows as inject
+//a lot more, collate, collectMany, combinations, dropWhile, flatten, groupBy, permutations, take, transpose, withIndex
+//asImmutable = java.Collections.unmodifiableList
+//asSynchronized = Collections.synchronizedList
+
+//quicksort example, can be used on any list item that supports <, =, >
+def quickSort(list) {
+	if (list.size() < 2) return list
+	def pivot = list[list.size().intdiv(2)] //find middle item
+	def left = list.findAll { item -> item < pivot}
+	def middle = list.findAll { item -> item == pivot}
+	def right = list.findAll { item -> item > pivot}
+	return quickSort(left) + middle + quickSort(right)
+}
+
+assert quickSort([]) == []
+assert quickSort([1]) == [1]
+println quickSort([1,2,3])
+println quickSort([4,2, 88])
+//duck typed
+println quickSort([1.0f, 'a', 10, null])
+println quickSort('bca')
+//as long as the type supports size(), getAt(index), and findAll it works with this quickSort method
+//such is the convenience of "duck typing"
+
+
+//filter, map, reduce style
+def urls = [ 
+	new URL('http', 'myshop.com', 80, "index.html"),	
+	new URL('https', 'myshop.com', 443, "buynow.html"),
+	new URL('ftp', 'myshop.com', 21, 'downloads')
+]
+
+//filter, map, sort, make into a string
+assert urls
+	.findAll {it.port < 99 }
+	.collect { it.file.toUpperCase() }
+	.sort()
+	.join(', ') == 'DOWNLOADS, INDEX.HTML'
+	
+	
+//java 8 style
+//note the use of some groovy-ism's combined with java style
+import java.util.stream.Collectors
+def commaSep = Collectors.joining(", ")	
+assert urls.stream()
+	.filter {it.port < 99}
+	.map { it.file.toUpperCase()}
+	.sorted()
+	.collect(commaSep) == 'DOWNLOADS, INDEX.HTML'
+
 
 	
 
