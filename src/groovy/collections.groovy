@@ -354,8 +354,22 @@ assert composed == [x:'y', a:1, b:2, c:3]
 
 //for string keys, can leave out the quotes ' or "
 //might need to put variable in () when using as a key to force evaluation
+assert myMap.a == 1
+println myMap.get('a')
+println myMap.get('a', 0)
+myMap['d'] = 1
 
-		
+//iterate map
+myMap.each {key, value ->
+	println "Key: $key Value: $value"
+}
+
+//no key, value is an entry
+myMap.each { entry ->
+	println entry.value
+}
+
+//find, findAll, subMap, collect
 
 
 
