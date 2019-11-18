@@ -236,6 +236,22 @@ println angusList[0]
 
 //groovy does not have arrays, use list of lists for multidimensional array
 
+//remove duplicates in list, create a set from the list
+def x = [1,1,1]
+def xclear = new HashSet(x).toList()
+println xclear
+//or use the unique method
+def xunique = x.unique()
+println xunique
+
+//removing nulls from a list
+def xnulls = [1, null, 1]
+//note, not parens required if only single argument
+def xnon = xnulls.findAll {it != null}
+println xnon
+//or use grep, which is passed a "filter object"
+xnon = xnulls.grep {it}
+println xnon
 
 
 	
