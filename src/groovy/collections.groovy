@@ -190,8 +190,11 @@ class SortExample {
 	}
 }
 
-//is a sort in place????
-def sortEggs = [new SortExample("angus", "guitar"), new SortExample("filthy", "drums"), new SortExample("malcolm", "ryhthm")]
+//is a sort in place, yes unless you create an immutable list via asImmutable()
+def filthy = new SortExample("filthy", "drums")
+def angus = new SortExample("angus", "guitar")
+def malcolm = new SortExample("malcolm", "ryhthm")
+def sortEggs = [angus, filthy, malcolm]
 sortEggs.sort({ da, db -> da.code <=> db.code})
 println sortEggs
 sortEggs.sort({da, db -> da.desc <=> db.desc})
@@ -202,6 +205,36 @@ sortEggs.sort(SortExample.comparatorByCode())
 println sortEggs
 sortEggs.sort(SortExample.comparatorByDesc())
 println sortEggs
+
+sortEggs.remove(1)
+println sortEggs
+
+//remove by value
+sortEggs.remove(filthy)
+println sortEggs
+
+sortEggs = [angus, malcolm, filthy]
+//transform 1 list into another
+def changeInstruments = sortEggs.collect {item -> 
+	switch (item.desc) {
+		case "drums": new SortExample(item.code, "bass guitar"); break
+		case "ryhthm": new SortExample(item.code, "trumpet"); break
+		case "guitar": new SortExample(item.code, "violin"); break
+	} 
+}
+
+println changeInstruments
+
+//findAll takes a closure
+def angusList = changeInstruments.findAll({ SortExample item ->
+	item.code == angus.code	
+}
+)
+
+println angusList[0]
+
+//groovy does not have arrays, use list of lists for multidimensional array
+
 
 
 	
