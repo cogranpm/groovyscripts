@@ -215,6 +215,7 @@ println sortEggs
 
 sortEggs = [angus, malcolm, filthy]
 //transform 1 list into another
+//collect is called map in other languages
 def changeInstruments = sortEggs.collect {item -> 
 	switch (item.desc) {
 		case "drums": new SortExample(item.code, "bass guitar"); break
