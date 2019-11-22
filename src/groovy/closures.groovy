@@ -73,6 +73,89 @@ assert 10 == multi ('string arg')
 assert 3 == multi (['list', 'of', 'values'])
 assert 14 == multi(6,8)
 
+//options with closures
+Map map = ['a': 1, 'b': 2]
+//parameter sequence with commas
+map.each { key,value -> map[key] = value * 2}
+assert map == ['a':2, 'b':4]
+
+
+//assing and call a closure reference
+Closure doubler = {key, value -> map[key] = value * 2}
+map.forEach(doubler)
+assert map == ['a': 4, 'b':8]
+
+def doubleMethod(entry) {
+	entry.value = entry.value * 2
+}
+
+//references and calls a method as a closure
+doubler = this.&doubleMethod
+map.each(doubler)
+assert map == ['a':8, 'b':16]
+
+//typed parameters in a closure are not checked until runtime, you might expect compile time, but not the case
+
+//calling closures
+def adder = { x, y -> return x+y }
+assert adder(4,3) == 7
+assert adder.call(2,6) == 8
+
+//place closure argument last, to allow abbreviated syntax
+def benchmark ( int repeat, Closure worker) {
+	def start = System.nanoTime()
+	
+	//note that the times loop syntax passes "it" as the current counter
+	//it takes a closure as an argument 
+	//unlike the usual style you have to "call" the closure
+	repeat.times { worker(it) }
+	def stop = System.nanoTime()
+	return stop - start
+}
+
+def slow = benchmark(10000) { (int) it / 2 }
+def fast = benchmark(10000) { it.intdiv(2) }
+assert fast * 2 < slow
+
+println "Slow:$slow Fast:$fast"
+
+//when calling closure, must pass correct number of arguments
+//can use defaults
+def defadder = { x, y=5 -> return x+y}
+assert defadder(4,3) == 7
+assert defadder.call(7) == 12
+
+
+//groovy.lang.Closure is an ordinary class
+//closure methods, can get number of parameters and types
+def numParams(Closure closure) {
+	closure.getMaximumNumberOfParameters()
+}
+
+assert numParams { one -> } == 1
+assert numParams { one, two -> } == 2
+
+def paramTypes (Closure closure) {
+	closure.getParameterTypes()
+}
+
+assert paramTypes { String s ->  } == [String]
+assert paramTypes { Number n, Date d -> } == [Number, Date]
+
+//currying - really is partial application
+//curry method returns a clone of the closure with fixed parameter/s
+def mult = { x, y -> return x * y }
+def twoTimes = mult.curry(2)
+assert twoTimes(5) == 10
+
+//curry binds leftmost parameter, also is ncurry, and rcurry or lcurry
+//instead of currying you can just do this:
+def twoTimesNonCurry = { y -> mult 2, y} //the application of mult looks a bit odd here, a closure that returns a closure
+assert twoTimesNonCurry(5) == 10
+
+//the real power is when the closure's parameters are themselves closures
+
+
 
 
 
