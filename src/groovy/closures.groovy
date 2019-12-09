@@ -154,9 +154,48 @@ def twoTimesNonCurry = { y -> mult 2, y} //the application of mult looks a bit o
 assert twoTimesNonCurry(5) == 10
 
 //the real power is when the closure's parameters are themselves closures
+//log example, use closures for customized version of activity whilst controller order of execution
+def configurator = { format, filter, line ->
+	filter(line) ? format(line) : null
+}
+
+def appender = { config, append, line ->
+	def out = config(line)
+	if (out) append(out)
+}
+
+//closure that takes a string
+def dateFormatter = {line -> "${new Date()}: $line" }
+
+//closure that takes a string
+def debugFilter = {line -> line.contains('debug')}
+
+//closure that takes a string
+def consoleAppender = {line -> println line}
+
+//returns a function object (closure) with 2 of 3 parameters set
+def myConf = configurator.curry(dateFormatter, debugFilter)
+
+//returns a closure with 2 of 3 parameters set
+//first is a closure expecting a 3rd parameter to be set
+def myLog = appender.curry(myConf, consoleAppender)
+
+myLog('here is some debug message')
+myLog('this will not be printed')
+
+
+//some links for functional with groovy
+//“Practically Groovy: Functional programming with curried closures,” IBM developerWorks, technical topics,
+//www.ibm.com/developerworks/library/j-pg08235/.7
+ //“Functional thinking: Functional features in Groovy, Part 1; Treasures lurking in Groovy, IBM developer-
+//Works, Technical topics, www.ibm.com/developerworks/java/library/j-ft7/.
 
 
 
+//closure composition
+def fourTimes = twoTimes >> twoTimes
+def eightTimes = twoTimes << fourTimes
+assert eightTimes(1) == twoTimes(fourTimes(1))
 
 
 
