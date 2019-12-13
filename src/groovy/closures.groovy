@@ -197,6 +197,24 @@ def fourTimes = twoTimes >> twoTimes
 def eightTimes = twoTimes << fourTimes
 assert eightTimes(1) == twoTimes(fourTimes(1))
 
+//another composition example
+def square = { it * it }
+def plusOne = { it + 1 }
+def half = { it / 2 }
+
+def c = half >> plusOne >> square
+println c(10) // (10 / 2 + 1) ** 2 = 36
+//half(10) = 2
+//plusOne(2) = 3
+//square(3) = 36
+
+//reversed composition
+def d = half << plusOne << square
+println d(10) // (10 ** 2 + 1) / 2
+//square -> plusOne -> half
+
+
+
 
 
 
