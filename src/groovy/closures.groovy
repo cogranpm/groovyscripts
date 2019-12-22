@@ -154,7 +154,7 @@ def twoTimesNonCurry = { y -> mult 2, y} //the application of mult looks a bit o
 assert twoTimesNonCurry(5) == 10
 
 //the real power is when the closure's parameters are themselves closures
-//log example, use closures for customized version of activity whilst controller order of execution
+//log example, use closures for customized version of activity whilst controlling order of execution
 def configurator = { format, filter, line ->
 	filter(line) ? format(line) : null
 }
@@ -185,9 +185,9 @@ myLog('this will not be printed')
 
 
 //some links for functional with groovy
-//“Practically Groovy: Functional programming with curried closures,” IBM developerWorks, technical topics,
+//â€œPractically Groovy: Functional programming with curried closures,â€� IBM developerWorks, technical topics,
 //www.ibm.com/developerworks/library/j-pg08235/.7
- //“Functional thinking: Functional features in Groovy, Part 1; Treasures lurking in Groovy, IBM developer-
+ //â€œFunctional thinking: Functional features in Groovy, Part 1; Treasures lurking in Groovy, IBM developer-
 //Works, Technical topics, www.ibm.com/developerworks/java/library/j-ft7/.
 
 
@@ -213,6 +213,25 @@ def d = half << plusOne << square
 println d(10) // (10 ** 2 + 1) / 2
 //square -> plusOne -> half
 
+//memoization
+//caching results of computation
+def fib
+fib = { it < 2 ? 1 : fib(it - 1) + fib(it -2)}
+fib = fib.memoize()
+assert fib(40) == 165_580_141
+def fiba = fib.memoizeAtLeast(1)
+def fibb = fib.memoizeAtMost(2)
+def fibc = fib.memoizeBetween(5, 10)
+println fiba(20)
+println fibb(25)
+println fibc(30)
+
+//trampoline for tail call optimization for closures
+//@TailRecursive for methods
+def last
+last = { it.size() == 1 ? it.head() : last.trampoline(it.tail())}
+last = last.trampoline()
+assert last(0..10_000) == 10_000
 
 
 
