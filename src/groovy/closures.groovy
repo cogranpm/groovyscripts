@@ -233,7 +233,23 @@ last = { it.size() == 1 ? it.head() : last.trampoline(it.tail())}
 last = last.trampoline()
 assert last(0..10_000) == 10_000
 
+//classification via isCase method
+//closure that returns a boolean and takes single arg
+//can be used in grep, switch
+def odd = { it % 2 == 1 }
+assert [1,2,3].grep(odd) == [1,3]
+switch (10) {
+	case odd: assert false
+}
+if (2 in odd) assert false
 
+
+//closure scopes
+def x = 0
+10.times { x++ }
+assert x == 10
+//note you can write to a variable in scope from within a closure
+//java lambda's dont' allow this
 
 
 
